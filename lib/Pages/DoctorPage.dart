@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:toast/toast.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:math';
 
 import '../Models/ThemeAttribute.dart';

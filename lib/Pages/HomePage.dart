@@ -10,6 +10,7 @@ import 'package:toast/toast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:math';
 
+import '../Models/Constants.dart';
 import '../Models/ThemeAttribute.dart';
 import '../Models/Utility.dart';
 import '../Models/Product.dart';
@@ -51,7 +52,7 @@ class HomePage extends StatefulWidget {
 *
 * @return: void
 */
-class _HomePage extends State<HomePage> with WidgetsBindingObserver{
+class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProviderStateMixin{
     /*[Attributes]*/
     int _state_id = 2;
     int mainDisplayState = 2;
@@ -65,6 +66,8 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     List _first_aids = [];
     List _doctors = [];
     List _emergencys = [];
+    int _selectedIndex = 0;
+    late TabController _controller;
 
     /*[Constructors]*/
 
@@ -93,11 +96,22 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     @override
     void initState(){
         WidgetsBinding.instance!.addObserver(this);
-
+        
         this._getPills();
         this._getFirstAids();
         this._getDoctors();
         this._getEmergency();
+
+        
+        _controller = TabController(length: 5, vsync: this, initialIndex: 0);
+        _controller.addListener(() {
+            if (_controller.indexIsChanging || _controller.index != _controller.previousIndex) {
+              setState(() {
+                    print("addListener: _controller.index: "+_controller.index.toString());
+                    this._selectedIndex = _controller.index;  
+                });
+            }
+        });
 
         super.initState();
     }
@@ -290,7 +304,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                     width: deviceWidth,
                     height: deviceHeight,
                     child: DefaultTabController(
-                        length: 4,
+                        length: 5,
                         child: Container(
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,6 +328,12 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                                                     child: TabBar(
                                                         indicatorColor: Colors.black,
                                                         unselectedLabelColor: Colors.grey,
+                                                        //controller: _controller,
+                                                        onTap: (int index){
+                                                            setState(() {
+                                                              this._selectedIndex = index;  
+                                                            });
+                                                        },
                                                         tabs:
                                                         [
                                                             Tab(
@@ -326,8 +346,12 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                                                                         color: Colors.white,
                                                                         borderRadius: BorderRadius.all(Radius.circular(15)),
                                                                     ),
-                                                                    child: Image.asset(
-                                                                        "lib/Assets/Images/doughnut_BNW_128x128.png",
+                                                                    child: this._selectedIndex == 0 ? Image.asset(
+                                                                        packagePath+"lib/Assets/Images/doughnut_128x128.png",
+                                                                        width: 30,
+                                                                        height: 30,
+                                                                    ) : Image.asset(
+                                                                        packagePath+"lib/Assets/Images/doughnut_BNW_128x128.png",
                                                                         width: 30,
                                                                         height: 30,
                                                                     ),
@@ -343,15 +367,19 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                                                                         color: Colors.white,
                                                                         borderRadius: BorderRadius.all(Radius.circular(15)),
                                                                     ),
-                                                                    child: Image.asset(
-                                                                        "lib/Assets/Images/burger_BNW_128x128.png",
+                                                                    child: this._selectedIndex == 1 ? Image.asset(
+                                                                        packagePath+"lib/Assets/Images/burger_128x128.png",
+                                                                        width: 30,
+                                                                        height: 30,
+                                                                    ) : Image.asset(
+                                                                        packagePath+"lib/Assets/Images/burger_BNW_128x128.png",
                                                                         width: 30,
                                                                         height: 30,
                                                                     ),
                                                                 ),
                                                             ),
                                                             Tab(
-                                                                text: "Doctor",
+                                                                text: "PanCake",
                                                                 icon: Container(
                                                                     width: 40,
                                                                     height: 40,
@@ -360,15 +388,19 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                                                                         color: Colors.white,
                                                                         borderRadius: BorderRadius.all(Radius.circular(15)),
                                                                     ),
-                                                                    child: Image.asset(
-                                                                        "lib/Projects/My_Pharmacy_App/Assets/Images/doctor_150x150.png",
+                                                                    child: this._selectedIndex == 2 ? Image.asset(
+                                                                        packagePath+"lib/Assets/Images/pancake_128x128.png",
+                                                                        width: 30,
+                                                                        height: 30,
+                                                                    ) : Image.asset(
+                                                                        packagePath+"lib/Assets/Images/pancake_BNW_128x128.png",
                                                                         width: 30,
                                                                         height: 30,
                                                                     ),
                                                                 ),
                                                             ),
                                                             Tab(
-                                                                text: "Emergency",
+                                                                text: "Smothies",
                                                                 icon: Container(
                                                                     width: 40,
                                                                     height: 40,
@@ -377,8 +409,33 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                                                                         color: Colors.white,
                                                                         borderRadius: BorderRadius.all(Radius.circular(15)),
                                                                     ),
-                                                                    child: Image.asset(
-                                                                        "lib/Projects/My_Pharmacy_App/Assets/Images/emergency_150x150.png",
+                                                                    child: this._selectedIndex == 3 ? Image.asset(
+                                                                        packagePath+"lib/Assets/Images/smoothie_128x128.png",
+                                                                        width: 30,
+                                                                        height: 30,
+                                                                    ) : Image.asset(
+                                                                        packagePath+"lib/Assets/Images/smoothie_BNW_128x128.png",
+                                                                        width: 30,
+                                                                        height: 30,
+                                                                    ),
+                                                                ),
+                                                            ),
+                                                            Tab(
+                                                                text: "Pizza",
+                                                                icon: Container(
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                    padding: EdgeInsets.all(5),
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors.white,
+                                                                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                                                                    ),
+                                                                    child: this._selectedIndex == 4 ? Image.asset(
+                                                                        packagePath+"lib/Assets/Images/pizza_128x128.png",
+                                                                        width: 30,
+                                                                        height: 30,
+                                                                    ) : Image.asset(
+                                                                        packagePath+"lib/Assets/Images/pizza_BNW_128x128.png",
                                                                         width: 30,
                                                                         height: 30,
                                                                     ),
@@ -521,6 +578,37 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                                                         ),
                                                     ),
                                                 ),
+                                                new Container(
+                                                    color: Colors.transparent,
+                                                    child: SingleChildScrollView(
+                                                        child: Column(
+                                                            children: this._pills.map((item) {
+                                                                return new Builder(
+                                                                    builder: (BuildContext context) {
+                                                                        Product product = new Product.fromJson(item);
+                                                                        
+                                                                        return GestureDetector(
+                                                                            child: Container(
+                                                                                //color: Colors.green,
+                                                                                margin: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
+                                                                                padding: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
+                                                                                child: new ProductCardWidget.withData(product),
+                                                                            ),
+                                                                            onTap: (){
+                                                                                /*Navigator.push(
+                                                                                    context,
+                                                                                    MaterialPageRoute<bool>(
+                                                                                        builder: (BuildContext context) => new HotelPage(hotel.id)
+                                                                                    )
+                                                                                );*/
+                                                                            }
+                                                                        );
+                                                                    },
+                                                                );
+                                                            }).toList(),
+                                                        ),
+                                                    ),
+                                                )
                                             ]
                                         )
                                     )

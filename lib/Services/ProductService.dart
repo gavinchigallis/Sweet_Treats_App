@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../Models/Constants.dart';
 import 'dart:convert';
 import 'package:toast/toast.dart';
 import 'package:mock_web_server/mock_web_server.dart';
@@ -35,7 +36,7 @@ class ProductService{
     {
         this.utility.Custom_Print("START: getPills");
         //Variables/
-        BuildContext context;
+        //BuildContext context;
         SharedPreferences prefs = await SharedPreferences.getInstance();
         dynamic results;
         final Map<String, dynamic> formData = {
@@ -44,7 +45,7 @@ class ProductService{
 
         //Mock API Service
         //Load the JSON file from the "Assets" folder
-        String jsonString = await rootBundle.loadString('lib/Projects/My_Pharmacy_App/Assets/API/pills.json');
+        String jsonString = await rootBundle.loadString(packagePath+'lib/Assets/API/pills.json');
         Map<String, String> ServerHeaders = new Map();
         ServerHeaders["X-Server"] = "MockDart";
         _server.enqueue(body: jsonString, httpCode: 200, headers: ServerHeaders, delay: new Duration(milliseconds: 1000));

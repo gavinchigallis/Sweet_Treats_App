@@ -3,20 +3,20 @@ library sweet_treats_app;
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-import './Models/ThemeAttribute.dart';
-import './Models/Utility.dart';
-import './Pages/HomePage.dart';
+import '../Models/ThemeAttribute.dart';
+import '../Models/Utility.dart';
+import 'HomePage.dart';
 
 
-class SweetTreatsApp extends StatefulWidget {
+class LaunchPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _SweetTreatsApp();
+    return _LaunchPage();
   }
 }
 
-class _SweetTreatsApp extends State<SweetTreatsApp> {
+class _LaunchPage extends State<LaunchPage> {
     //Variables
     String _user_email="";
     ThemeAttribute theme_attribute = ThemeAttribute();
