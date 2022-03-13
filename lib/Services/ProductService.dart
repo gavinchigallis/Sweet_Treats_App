@@ -32,32 +32,30 @@ class ProductService{
     *
     * @return: JSON
     */
-    Future<dynamic> getPills() async
+    Future<dynamic> getProductsByCategoryId(int id) async
     {
-        this.utility.Custom_Print("START: getPills");
+        this.utility.Custom_Print("START: getProductsByCategoryId");
         //Variables/
         //BuildContext context;
         SharedPreferences prefs = await SharedPreferences.getInstance();
         dynamic results;
         final Map<String, dynamic> formData = {
-            //"id": 1,
+            "categoryId": id,
         };
 
         //Mock API Service
         //Load the JSON file from the "Assets" folder
-        String jsonString = await rootBundle.loadString(packagePath+'lib/Assets/API/pills.json');
+        String jsonString = await rootBundle.loadString(packagePath+"lib/Assets/API/products_"+id.toString()+".json");
         Map<String, String> ServerHeaders = new Map();
         ServerHeaders["X-Server"] = "MockDart";
         _server.enqueue(body: jsonString, httpCode: 200, headers: ServerHeaders, delay: new Duration(milliseconds: 1000));
 
-        utility.Custom_Print(utility.App_API_URL + 'pills');
-        //utility.Custom_Print('formData: '+formData.toString());
-
+        utility.Custom_Print(utility.App_API_URL + 'products/category/'+id.toString());
 
         HttpClient client = new HttpClient();
         client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
 
-        String url = utility.App_API_URL + 'pills';
+        String url = utility.App_API_URL + 'products/category/'+id.toString();
 
         //HttpClientRequest request = await client.getUrl(Uri.parse(url));
         HttpClientRequest request = await client.get(_server.host, _server.port, url);
@@ -133,7 +131,7 @@ class ProductService{
             }
         }
 
-        utility.Custom_Print("STOP: getPills");
+        utility.Custom_Print("STOP: getProductsByCategoryId");
         return results;
     }
 

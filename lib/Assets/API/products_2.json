@@ -1,0 +1,186 @@
+[
+    {
+        "id": 1,
+        "name": "Whopper",
+        "category_id": 1,
+        "company": "Burger King",
+        "price": 64,
+        "like": false,
+        "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "rating": 3.8,
+        "image": "http://dynamicevolution.technology/Apps/flutter_widgets/storage/app/public/app_assets/Sweet_Treats_App/images/burger_1.png",
+        "hex": "c4b272",
+        "ingredients": [
+            {
+                "id": 1,
+                "name": "Sugar",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 2,
+                "hex": "def6f8"
+            },
+            {
+                "id": 2,
+                "name": "Salt",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 3,
+                "hex": "fae9f1"
+            },
+            {
+                "id": 3,
+                "name": "Fat",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 12,
+                "hex": "fbf4e2"
+            },
+            {
+                "id": 4,
+                "name": "Engery",
+                "amount": 140,
+                "unit": "Kcal",
+                "percentage": 12,
+                "hex": "ffebef"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Double Whopper",
+        "category_id": 1,
+        "company": "Burger King",
+        "price": 80,
+        "like": false,
+        "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "rating": 4.9,
+        "image": "http://dynamicevolution.technology/Apps/flutter_widgets/storage/app/public/app_assets/Sweet_Treats_App/images/burger_2.png",
+        "hex": "cb7494",
+        "ingredients": [
+            {
+                "id": 1,
+                "name": "Sugar",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 2,
+                "hex": "def6f8"
+            },
+            {
+                "id": 2,
+                "name": "Salt",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 3,
+                "hex": "fae9f1"
+            },
+            {
+                "id": 3,
+                "name": "Fat",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 12,
+                "hex": "fbf4e2"
+            },
+            {
+                "id": 4,
+                "name": "Engery",
+                "amount": 140,
+                "unit": "Kcal",
+                "percentage": 12,
+                "hex": "ffebef"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Mac D",
+        "category_id": 1,
+        "company": "McDonals",
+        "price": 20,
+        "like": true,
+        "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "rating": 4.2,
+        "image": "http://dynamicevolution.technology/Apps/flutter_widgets/storage/app/public/app_assets/Sweet_Treats_App/images/burger_3.png",
+        "hex": "5fc1ce",
+        "ingredients": [
+            {
+                "id": 1,
+                "name": "Sugar",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 2,
+                "hex": "def6f8"
+            },
+            {
+                "id": 2,
+                "name": "Salt",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 3,
+                "hex": "fae9f1"
+            },
+            {
+                "id": 3,
+                "name": "Fat",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 12,
+                "hex": "fbf4e2"
+            },
+            {
+                "id": 4,
+                "name": "Engery",
+                "amount": 140,
+                "unit": "Kcal",
+                "percentage": 12,
+                "hex": "ffebef"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Big Mac",
+        "category_id": 1,
+        "company": "McDonals",
+        "price": 31,
+        "like": false,
+        "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "rating": 3.5,
+        "image": "http://dynamicevolution.technology/Apps/flutter_widgets/storage/app/public/app_assets/Sweet_Treats_App/images/burger_4.png",
+        "hex": "a66f8f",
+        "ingredients": [
+            {
+                "id": 1,
+                "name": "Sugar",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 2,
+                "hex": "def6f8"
+            },
+            {
+                "id": 2,
+                "name": "Salt",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 3,
+                "hex": "fae9f1"
+            },
+            {
+                "id": 3,
+                "name": "Fat",
+                "amount": 8,
+                "unit": "Gram",
+                "percentage": 12,
+                "hex": "fbf4e2"
+            },
+            {
+                "id": 4,
+                "name": "Engery",
+                "amount": 140,
+                "unit": "Kcal",
+                "percentage": 12,
+                "hex": "ffebef"
+            }
+        ]
+    }
+]

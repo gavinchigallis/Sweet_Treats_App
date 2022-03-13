@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import './Ingredient.dart';
 
 class Product
 {
     /*[Attributes]*/
-    int id = 0;
-    String name = "";
-    int category_id = 0;
-    double price = 0;
-    bool like = false;
-    String details = "";
-    String image = "";
-    List<dynamic> images = [];
+    late int id;
+    late String name;
+    late int category_id;
+    late String company;
+    late double price;
+    late bool like;
+    late String details;
+    late double rating;
+    late String image;
+    late String hex;
+    late List<Ingredient> ingredients;
+    
 
     /*[Constructors]*/
     Product();
@@ -21,22 +26,28 @@ class Product
         id = json['id'],
         name = json['name'],
         category_id = json['category_id'],
-        price = json['price'],
+        company = json['company'],
+        price = double.parse(json['price'].toString()),
         like = json['like'],
         details = json['details'],
+        rating = json['rating'],
         image = json['image'],
-        images = json['images'];
+        hex = json['hex'],
+        ingredients = Ingredient.listFromJson(json['ingredients']);
 
     Map<String, dynamic> toJson() =>
     {
         'id': id,
         'name': name,
         'category_id': category_id,
+        'company': company,
         'price': price,
         'like': like,
         'details': details,
+        'rating': rating,
         'image': image,
-        'images': images
+        'hex': hex,
+        'ingredients': ingredients
     };
 
     /*[Methods]*/

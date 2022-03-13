@@ -15,8 +15,8 @@ import '../Models/ThemeAttribute.dart';
 import '../Models/Utility.dart';
 import '../Models/Product.dart';
 import '../Widgets/ProductCardWidget.dart';
-import '../Widgets/DoctorCardWidget.dart';
 import '../Services/ProductService.dart';
+import 'ProductPage.dart';
 
 
 
@@ -62,10 +62,13 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     bool _isPageLoading = false;
     ProductService _productService = new ProductService();
-    List _pills = [];
-    List _first_aids = [];
-    List _doctors = [];
-    List _emergencys = [];
+    List<dynamic> _donuts = [];
+    bool _isLoadingDonuts = false;
+    List<dynamic> _burgers = [];
+    List<dynamic> _doctors = [];
+    List<dynamic> _pancakes = [];
+    List<dynamic> _smoothies = [];
+    List<dynamic> _pizzas = [];
     int _selectedIndex = 0;
     late TabController _controller;
 
@@ -97,20 +100,19 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
     void initState(){
         WidgetsBinding.instance!.addObserver(this);
         
-        this._getPills();
-        this._getFirstAids();
-        this._getDoctors();
-        this._getEmergency();
+        this._getDonuts(false);
+        this._getBurgers();
+        this._getPancakes(false);
+        this._getSmoothies();
+        this._getPizzas();
 
         
         _controller = TabController(length: 5, vsync: this, initialIndex: 0);
         _controller.addListener(() {
-            if (_controller.indexIsChanging || _controller.index != _controller.previousIndex) {
-              setState(() {
-                    print("addListener: _controller.index: "+_controller.index.toString());
-                    this._selectedIndex = _controller.index;  
-                });
-            }
+            setState(() {
+              this.utility.Custom_Print("addListener: _controller.index: "+_controller.index.toString());
+              this._selectedIndex = _controller.index;
+            });
         });
 
         super.initState();
@@ -315,7 +317,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
                                     ),
                                     Container(
                                         width: deviceWidth,
-                                        height: 125,
+                                        height: 100,
                                         decoration: BoxDecoration(
                                             color: Colors.transparent,
                                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
@@ -328,7 +330,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
                                                     child: TabBar(
                                                         indicatorColor: Colors.black,
                                                         unselectedLabelColor: Colors.grey,
-                                                        //controller: _controller,
+                                                        controller: _controller,
                                                         onTap: (int index){
                                                             setState(() {
                                                               this._selectedIndex = index;  
@@ -400,7 +402,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
                                                                 ),
                                                             ),
                                                             Tab(
-                                                                text: "Smothies",
+                                                                text: "Smoothies",
                                                                 icon: Container(
                                                                     width: 40,
                                                                     height: 40,
@@ -449,166 +451,281 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
                                         ),
                                     ),
                                     Container(
-                                        color: Colors.transparent,
+                                        color: Colors.grey[50],
                                         width: deviceWidth,
-                                        height: deviceHeight - 200,
+                                        height: deviceHeight - 215,
                                         child: TabBarView(
+                                            controller: this._controller,
                                             children: [
-                                                new Container(
-                                                    color: Colors.transparent,
+                                                Container(
+                                                    padding: EdgeInsets.only(top: 10), 
                                                     child: SingleChildScrollView(
+                                                      child: Container(
                                                         child: Column(
-                                                            children: this._pills.map((item) {
-                                                                return new Builder(
-                                                                    builder: (BuildContext context) {
-                                                                        Product product = new Product.fromJson(item);
+                                                          children: [
+                                                              this._isLoadingDonuts ? Container(
+                                                                padding: EdgeInsets.only(left: 10, right: 10),  
+                                                                child: GridView.builder(
+                                                                  shrinkWrap: true,
+                                                                  itemCount: 4,  
+                                                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
+                                                                      crossAxisCount: 2,  
+                                                                      crossAxisSpacing: 5.0,  
+                                                                      mainAxisSpacing: 5.0,
+                                                                      childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.6),
+                                                                  ),  
+                                                                  itemBuilder: (BuildContext context, int index){  
+                                                                    
+                                                                    return Container(
+                                                                        //color: Colors.green,
+                                                                        margin: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                        padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                        child: new ProductCardWidget(),
+                                                                    );  
+                                                                  },  
+                                                                )
+                                                              ) : Container(
+                                                              height: deviceHeight - 350,
+                                                              padding: EdgeInsets.only(left: 10, right: 10),  
+                                                              child: GridView.builder(
+                                                                shrinkWrap: true,
+                                                                itemCount: this._donuts.length,  
+                                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
+                                                                    crossAxisCount: 2,  
+                                                                    crossAxisSpacing: 5.0,  
+                                                                    mainAxisSpacing: 5.0,
+                                                                    childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.6),
+                                                                ),  
+                                                                itemBuilder: (BuildContext context, int index){  
+                                                                  Product product = new Product.fromJson(this._donuts[index]);
+                                                                              
+                                                                  return GestureDetector(
+                                                                      child: Container(
+                                                                          //color: Colors.green,
+                                                                          margin: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                          padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                          child: new ProductCardWidget.withData(product),
+                                                                      ),
+                                                                      onTap: (){
+                                                                          Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute<bool>(
+                                                                                  builder: (BuildContext context) => new ProductPage.withData(product)
+                                                                              )
+                                                                          );
+                                                                      }
+                                                                  );  
+                                                                },  
+                                                              )
+                                                            ),
+                                                            GestureDetector(
+                                                              child: Center(
+                                                                child: Container(
+                                                                  margin: EdgeInsets.only(
+                                                                    top: 30
+                                                                  ),
+                                                                  padding: EdgeInsets.only(
+                                                                    left: 30,
+                                                                    right: 30,
+                                                                    top: 15,
+                                                                    bottom: 15
+                                                                  ),
+                                                                  decoration: BoxDecoration(
+                                                                      color: Colors.black,
+                                                                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                  ),
+                                                                  child: Text('Show More', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0, color: Colors.white)),
+                                                                ),
+                                                              ),
+                                                              onTap: (){
+                                                                this._getDonuts(true);
+                                                              },
+                                                            )
+                                                          ]
+                                                      )
+                                                    )
+                                                  )
+                                                ),
+                                                Container(
+                                                    padding: EdgeInsets.only(top: 10), 
+                                                    color: Colors.transparent,
+                                                    child: Container(  
+                                                        padding: EdgeInsets.only(left: 10, right: 10),  
+                                                        child: GridView.builder(  
+                                                          shrinkWrap: true,
+                                                          itemCount: this._burgers.length,  
+                                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
+                                                              crossAxisCount: 2,  
+                                                              crossAxisSpacing: 5.0,  
+                                                              mainAxisSpacing: 5.0,
+                                                              childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.6),
+                                                          ),  
+                                                          itemBuilder: (BuildContext context, int index){  
+                                                            Product product = new Product.fromJson(this._burgers[index]);
                                                                         
-                                                                        return GestureDetector(
-                                                                            child: Container(
-                                                                                //color: Colors.green,
-                                                                                margin: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                padding: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                child: new ProductCardWidget.withData(product),
-                                                                            ),
-                                                                            onTap: (){
-                                                                                /*Navigator.push(
-                                                                                    context,
-                                                                                    MaterialPageRoute<bool>(
-                                                                                        builder: (BuildContext context) => new HotelPage(hotel.id)
-                                                                                    )
-                                                                                );*/
-                                                                            }
-                                                                        );
-                                                                    },
-                                                                );
-                                                            }).toList(),
-                                                        ),
+                                                            return GestureDetector(
+                                                                child: Container(
+                                                                    //color: Colors.green,
+                                                                    margin: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                    padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                    child: new ProductCardWidget.withData(product),
+                                                                ),
+                                                                onTap: (){
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute<bool>(
+                                                                            builder: (BuildContext context) => new ProductPage.withData(product)
+                                                                        )
+                                                                    );
+                                                                }
+                                                            );  
+                                                          },  
+                                                        )
                                                     ),
                                                 ),
-                                                new Container(
+                                                Container(
+                                                    padding: EdgeInsets.only(top: 10), 
                                                     color: Colors.transparent,
                                                     child: SingleChildScrollView(
+                                                      child: Container(
                                                         child: Column(
-                                                            children: this._first_aids.map((item) {
-                                                                return new Builder(
-                                                                    builder: (BuildContext context) {
-                                                                        Product product = new Product.fromJson(item);
+                                                        children: [
+                                                              Container(
+                                                              height: deviceHeight - 350,
+                                                              padding: EdgeInsets.only(left: 10, right: 10),  
+                                                              child: GridView.builder(
+                                                                shrinkWrap: true,  
+                                                                itemCount: this._pancakes.length,  
+                                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
+                                                                    crossAxisCount: 2,  
+                                                                    crossAxisSpacing: 5.0,  
+                                                                    mainAxisSpacing: 5.0,
+                                                                    childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.6),
+                                                                ),  
+                                                                itemBuilder: (BuildContext context, int index){  
+                                                                  Product product = new Product.fromJson(this._pancakes[index]);
+                                                                              
+                                                                  return GestureDetector(
+                                                                      child: Container(
+                                                                          //color: Colors.green,
+                                                                          margin: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                          padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                          child: new ProductCardWidget.withData(product),
+                                                                      ),
+                                                                      onTap: (){
+                                                                          Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute<bool>(
+                                                                                  builder: (BuildContext context) => new ProductPage.withData(product)
+                                                                              )
+                                                                          );
+                                                                      }
+                                                                  );  
+                                                                },  
+                                                              ),
+                                                          ),
+                                                                GestureDetector(
+                                                                  child: Center(
+                                                                    child: Container(
+                                                                    margin: EdgeInsets.only(
+                                                                      top: 30
+                                                                    ),
+                                                                    padding: EdgeInsets.only(
+                                                                      left: 30,
+                                                                      right: 30,
+                                                                      top: 15,
+                                                                      bottom: 15
+                                                                    ),
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors.black,
+                                                                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                    ),
+                                                                    child: Text('Show More', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0, color: Colors.white)),
+                                                                ),
+                                                              ),
+                                                              onTap: (){
+                                                                this._getPancakes(true);
+                                                              },
+                                                            )
+                                                        ]
+                                                      )
+                                                    ),
+                                                  )
+                                                ),
+                                                Container(
+                                                    padding: EdgeInsets.only(top: 10), 
+                                                    color: Colors.transparent,
+                                                    child: Container(  
+                                                        padding: EdgeInsets.only(left: 10, right: 10),  
+                                                        child: GridView.builder(
+                                                          shrinkWrap: true,
+                                                          itemCount: this._smoothies.length,  
+                                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
+                                                              crossAxisCount: 2,  
+                                                              crossAxisSpacing: 5.0,  
+                                                              mainAxisSpacing: 5.0,
+                                                              childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.6),
+                                                          ),  
+                                                          itemBuilder: (BuildContext context, int index){  
+                                                            Product product = new Product.fromJson(this._smoothies[index]);
                                                                         
-                                                                        return GestureDetector(
-                                                                            child: Container(
-                                                                                //color: Colors.green,
-                                                                                margin: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                padding: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                child: new ProductCardWidget.withData(product),
-                                                                            ),
-                                                                            onTap: (){
-                                                                                /*Navigator.push(
-                                                                                    context,
-                                                                                    MaterialPageRoute<bool>(
-                                                                                        builder: (BuildContext context) => new HotelPage(hotel.id)
-                                                                                    )
-                                                                                );*/
-                                                                            }
-                                                                        );
-                                                                    },
-                                                                );
-                                                            }).toList(),
-                                                        ),
+                                                            return GestureDetector(
+                                                                child: Container(
+                                                                    //color: Colors.green,
+                                                                    margin: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                    padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                    child: new ProductCardWidget.withData(product),
+                                                                ),
+                                                                onTap: (){
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute<bool>(
+                                                                            builder: (BuildContext context) => new ProductPage.withData(product)
+                                                                        )
+                                                                    );
+                                                                }
+                                                            );  
+                                                          },  
+                                                        )
                                                     ),
                                                 ),
-                                                new Container(
+                                                Container(
+                                                    padding: EdgeInsets.only(top: 10), 
                                                     color: Colors.transparent,
-                                                    child: SingleChildScrollView(
-                                                        child: Column(
-                                                            children: this._doctors.map((item) {
-                                                                return new Builder(
-                                                                    builder: (BuildContext context) {
-                                                                        Product product = new Product.fromJson(item);
+                                                    child: Container(  
+                                                        padding: EdgeInsets.only(left: 10, right: 10),  
+                                                        child: GridView.builder(
+                                                          shrinkWrap: true,
+                                                          itemCount: this._pizzas.length,  
+                                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
+                                                              crossAxisCount: 2,  
+                                                              crossAxisSpacing: 5.0,  
+                                                              mainAxisSpacing: 5.0,
+                                                              childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.6),
+                                                          ),  
+                                                          itemBuilder: (BuildContext context, int index){  
+                                                            Product product = new Product.fromJson(this._pizzas[index]);
                                                                         
-                                                                        return GestureDetector(
-                                                                            child: Container(
-                                                                                //color: Colors.green,
-                                                                                margin: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                padding: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                child: new DoctorCardWidget.withData(product),
-                                                                            ),
-                                                                            onTap: (){
-                                                                                /*Navigator.push(
-                                                                                    context,
-                                                                                    MaterialPageRoute<bool>(
-                                                                                        builder: (BuildContext context) => new HotelPage(hotel.id)
-                                                                                    )
-                                                                                );*/
-                                                                            }
-                                                                        );
-                                                                    },
-                                                                );
-                                                            }).toList(),
-                                                        ),
+                                                            return GestureDetector(
+                                                                child: Container(
+                                                                    //color: Colors.green,
+                                                                    margin: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                    padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+                                                                    child: new ProductCardWidget.withData(product),
+                                                                ),
+                                                                onTap: (){
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute<bool>(
+                                                                            builder: (BuildContext context) => new ProductPage.withData(product)
+                                                                        )
+                                                                    );
+                                                                }
+                                                            );  
+                                                          },  
+                                                        )
                                                     ),
                                                 ),
-                                                new Container(
-                                                    color: Colors.transparent,
-                                                    child: SingleChildScrollView(
-                                                        child: Column(
-                                                            children: this._emergencys.map((item) {
-                                                                return new Builder(
-                                                                    builder: (BuildContext context) {
-                                                                        Product product = new Product.fromJson(item);
-                                                                        
-                                                                        return GestureDetector(
-                                                                            child: Container(
-                                                                                //color: Colors.green,
-                                                                                margin: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                padding: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                child: new ProductCardWidget.withData(product),
-                                                                            ),
-                                                                            onTap: (){
-                                                                                /*Navigator.push(
-                                                                                    context,
-                                                                                    MaterialPageRoute<bool>(
-                                                                                        builder: (BuildContext context) => new HotelPage(hotel.id)
-                                                                                    )
-                                                                                );*/
-                                                                            }
-                                                                        );
-                                                                    },
-                                                                );
-                                                            }).toList(),
-                                                        ),
-                                                    ),
-                                                ),
-                                                new Container(
-                                                    color: Colors.transparent,
-                                                    child: SingleChildScrollView(
-                                                        child: Column(
-                                                            children: this._pills.map((item) {
-                                                                return new Builder(
-                                                                    builder: (BuildContext context) {
-                                                                        Product product = new Product.fromJson(item);
-                                                                        
-                                                                        return GestureDetector(
-                                                                            child: Container(
-                                                                                //color: Colors.green,
-                                                                                margin: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                padding: EdgeInsets.only(left: 5, top: 0, right: 5, bottom: 0),
-                                                                                child: new ProductCardWidget.withData(product),
-                                                                            ),
-                                                                            onTap: (){
-                                                                                /*Navigator.push(
-                                                                                    context,
-                                                                                    MaterialPageRoute<bool>(
-                                                                                        builder: (BuildContext context) => new HotelPage(hotel.id)
-                                                                                    )
-                                                                                );*/
-                                                                            }
-                                                                        );
-                                                                    },
-                                                                );
-                                                            }).toList(),
-                                                        ),
-                                                    ),
-                                                )
                                             ]
                                         )
                                     )
@@ -670,27 +787,23 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
     *
     * @return: void
     */
-    Future<void> _getPills() async {
-        this.utility.Custom_Print("START: _getPills");
+    Future <List<dynamic>?> _getProductsByCategoryId(int id) async {
+        this.utility.Custom_Print("START: _getProductsByCategoryId");
         //Variables
+        
 
         setState(() {
             this._isPageLoading = true;
         });
         
         
-        this._productService.getPills()
+        var result = await this._productService.getProductsByCategoryId(id)
         .then((value) {
             // Run extra code here
             utility.Custom_Print("Function Complete Successfully");
             utility.Custom_Print(value.toString());
 
-            setState(() {
-                this._isPageLoading = false;
-                //this._state_id = 2;
-                //this.mainDisplayState = 2;
-                this._pills = value;
-            });
+            return value;
         },
         onError: (error) {
             utility.Custom_Print("Future returned Error");
@@ -750,9 +863,9 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
             });
         });
 
-        this.utility.Custom_Print("STOP: _getPills");
+        this.utility.Custom_Print("STOP: _getProductsByCategoryId");
+        return result;
     }
-
 
     /*
     * @Description: 
@@ -761,89 +874,36 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
     *
     * @return: void
     */
-    Future<void> _getFirstAids() async {
-        this.utility.Custom_Print("START: _getFirstAids");
+    Future<void> _getDonuts(bool update) async {
+        this.utility.Custom_Print("START: _getDonuts");
         //Variables
 
-        setState(() {
-            this._isPageLoading = true;
-        });
-        
-        
-        this._productService.getFirstAids()
-        .then((value) {
-            // Run extra code here
-            utility.Custom_Print("Function Complete Successfully");
-            utility.Custom_Print(value.toString());
-
-            setState(() {
-                this._isPageLoading = false;
-                //this._state_id = 2;
-                //this.mainDisplayState = 2;
-                this._first_aids = value;
-            });
-        },
-        onError: (error) {
-            utility.Custom_Print("Future returned Error");
-            utility.Custom_Print(error.toString());
-            //Toast.show(error['message'], context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-
-            setState(() {
-                this._isPageLoading = false;
-            });
-
-            switch(error.runtimeType) { 
-
-                case SocketException: {
-
-                    SnackBar snackBar = SnackBar(
-                        content: Text("Could not login at this time"),
-                        action: SnackBarAction(
-                            label: 'OK',
-                            onPressed: () {
-                                // Some code to undo the change.
-                            },
-                        ),
-                    );
-                    
-                    //_scaffoldKey.currentState.showSnackBar(snackBar);
-
-                    Toast.show("Could not login at this time", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    break;
-                }
-
-
-                default: {
-
-                    SnackBar snackBar =  SnackBar(
-                        content: Text(error['error']),
-                        action: SnackBarAction(
-                            label: 'OK',
-                            onPressed: () {
-                                // Some code to undo the change.
-                            },
-                        ),
-                    );
-                    
-                    //_scaffoldKey.currentState.showSnackBar(snackBar);
-
-                    Toast.show(error['error'].toString(), context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                }
+        setState((){
+            if(!update){
+              this._isLoadingDonuts = true;
             }
-        })
-        .catchError((error){
-            utility.Custom_Print("Please try again later");
-            utility.Custom_Print(error.toString());
-            //Toast.show("Please try again later", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-
-            setState(() {
-                this._isPageLoading = false;
-            });
         });
 
-        this.utility.Custom_Print("STOP: _getFirstAids");
-    }
+        await this._getProductsByCategoryId(1).then((value){
+          
+          this.utility.Custom_Print("donuts: ");
+          this.utility.Custom_Print(value.toString());
 
+          setState((){
+              if(update){
+                value!.shuffle();
+                this._donuts.addAll(value);
+              }else{
+                this._isLoadingDonuts = false;
+                this._donuts = value!;
+              }
+              
+          });
+        });
+        
+
+        this.utility.Custom_Print("STOP: _getDonuts");
+    }
 
     /*
     * @Description: 
@@ -852,89 +912,23 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
     *
     * @return: void
     */
-    Future<void> _getDoctors() async {
-        this.utility.Custom_Print("START: _getDoctors");
+    Future<void> _getBurgers() async {
+        this.utility.Custom_Print("START: _getBurgers");
         //Variables
 
-        setState(() {
-            this._isPageLoading = true;
+        await this._getProductsByCategoryId(2).then((value){
+          
+          this.utility.Custom_Print("Burgers: ");
+          this.utility.Custom_Print(value.toString());
+
+          setState((){
+              this._burgers = value!;
+          });
         });
         
-        
-        this._productService.getDoctors()
-        .then((value) {
-            // Run extra code here
-            utility.Custom_Print("Function Complete Successfully");
-            utility.Custom_Print(value.toString());
 
-            setState(() {
-                this._isPageLoading = false;
-                //this._state_id = 2;
-                //this.mainDisplayState = 2;
-                this._doctors = value;
-            });
-        },
-        onError: (error) {
-            utility.Custom_Print("Future returned Error");
-            utility.Custom_Print(error.toString());
-            //Toast.show(error['message'], context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-
-            setState(() {
-                this._isPageLoading = false;
-            });
-
-            switch(error.runtimeType) { 
-
-                case SocketException: {
-
-                    SnackBar snackBar = SnackBar(
-                        content: Text("Could not login at this time"),
-                        action: SnackBarAction(
-                            label: 'OK',
-                            onPressed: () {
-                                // Some code to undo the change.
-                            },
-                        ),
-                    );
-                    
-                    //_scaffoldKey.currentState.showSnackBar(snackBar);
-
-                    Toast.show("Could not login at this time", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    break;
-                }
-
-
-                default: {
-
-                    SnackBar snackBar =  SnackBar(
-                        content: Text(error['error']),
-                        action: SnackBarAction(
-                            label: 'OK',
-                            onPressed: () {
-                                // Some code to undo the change.
-                            },
-                        ),
-                    );
-                    
-                    //_scaffoldKey.currentState.showSnackBar(snackBar);
-
-                    Toast.show(error['error'].toString(), context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                }
-            }
-        })
-        .catchError((error){
-            utility.Custom_Print("Please try again later");
-            utility.Custom_Print(error.toString());
-            //Toast.show("Please try again later", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-
-            setState(() {
-                this._isPageLoading = false;
-            });
-        });
-
-        this.utility.Custom_Print("STOP: _getDoctors");
+        this.utility.Custom_Print("STOP: _getBurgers");
     }
-
 
     /*
     * @Description: 
@@ -943,86 +937,76 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver, TickerProvi
     *
     * @return: void
     */
-    Future<void> _getEmergency() async {
-        this.utility.Custom_Print("START: _getEmergency");
+    Future<void> _getPancakes(bool update) async {
+        this.utility.Custom_Print("START: _getPancakes");
         //Variables
 
-        setState(() {
-            this._isPageLoading = true;
+        await this._getProductsByCategoryId(3).then((value){
+          
+          this.utility.Custom_Print("Pancakes: ");
+          this.utility.Custom_Print(value.toString());
+
+          setState((){
+              if(update){
+                value!.shuffle();
+                this._pancakes.addAll(value);
+              }else{
+                this._pancakes = value!;
+              }
+          });
         });
         
-        
-        this._productService.getEmergencies()
-        .then((value) {
-            // Run extra code here
-            utility.Custom_Print("Function Complete Successfully");
-            utility.Custom_Print(value.toString());
 
-            setState(() {
-                this._isPageLoading = false;
-                //this._state_id = 2;
-                //this.mainDisplayState = 2;
-                this._emergencys = value;
-            });
-        },
-        onError: (error) {
-            utility.Custom_Print("Future returned Error");
-            utility.Custom_Print(error.toString());
-            //Toast.show(error['message'], context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+        this.utility.Custom_Print("STOP: _getPancakes");
+    }
 
-            setState(() {
-                this._isPageLoading = false;
-            });
+    /*
+    * @Description: 
+    *
+    * @param:
+    *
+    * @return: void
+    */
+    Future<void> _getPizzas() async {
+        this.utility.Custom_Print("START: _getPizzas");
+        //Variables
 
-            switch(error.runtimeType) { 
+        await this._getProductsByCategoryId(5).then((value){
+          
+          this.utility.Custom_Print("Pizzas: ");
+          this.utility.Custom_Print(value.toString());
 
-                case SocketException: {
-
-                    SnackBar snackBar = SnackBar(
-                        content: Text("Could not login at this time"),
-                        action: SnackBarAction(
-                            label: 'OK',
-                            onPressed: () {
-                                // Some code to undo the change.
-                            },
-                        ),
-                    );
-                    
-                    //_scaffoldKey.currentState.showSnackBar(snackBar);
-
-                    Toast.show("Could not login at this time", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    break;
-                }
-
-
-                default: {
-
-                    SnackBar snackBar =  SnackBar(
-                        content: Text(error['error']),
-                        action: SnackBarAction(
-                            label: 'OK',
-                            onPressed: () {
-                                // Some code to undo the change.
-                            },
-                        ),
-                    );
-                    
-                    //_scaffoldKey.currentState.showSnackBar(snackBar);
-
-                    Toast.show(error['error'].toString(), context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                }
-            }
-        })
-        .catchError((error){
-            utility.Custom_Print("Please try again later");
-            utility.Custom_Print(error.toString());
-            //Toast.show("Please try again later", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-
-            setState(() {
-                this._isPageLoading = false;
-            });
+          setState((){
+              this._pizzas = value!;
+          });
         });
+        
 
-        this.utility.Custom_Print("STOP: _getEmergency");
+        this.utility.Custom_Print("STOP: _getPizzas");
+    }
+
+    /*
+    * @Description: 
+    *
+    * @param:
+    *
+    * @return: void
+    */
+    Future<void> _getSmoothies() async {
+        this.utility.Custom_Print("START: _getSmoothies");
+        //Variables
+
+        await this._getProductsByCategoryId(4).then((value){
+          
+          this.utility.Custom_Print("Smoothies: ");
+          this.utility.Custom_Print(value.toString());
+
+          setState((){
+              this._smoothies = value!;
+          });
+        });
+        
+
+        this.utility.Custom_Print("STOP: _getSmoothies");
     }
 }

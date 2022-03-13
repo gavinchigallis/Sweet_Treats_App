@@ -4,14 +4,13 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:toast/toast.dart';
 import 'package:provider/provider.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../Models/ThemeAttribute.dart';
 import '../Models/Utility.dart';
 import '../Models/Product.dart';
-import '../Pages/PillPage.dart';
-import '../Pages/FirstAidPage.dart';
-import '../Pages/DoctorPage.dart';
-import '../Pages/EmergencyPage.dart';
 import '../Services/ProductService.dart';
 
 class ProductCardWidget extends StatefulWidget {
@@ -45,20 +44,20 @@ class ProductCardWidget extends StatefulWidget {
       {
             case 2:
             {
-                return _ProductCardWidget._withData(this._state_id, this.widgetDataObject);
+                return _ProductCardWidgetState._withData(this._state_id, this.widgetDataObject);
                 break;
             }
 
             default:
             {
-                return _ProductCardWidget();
+                return _ProductCardWidgetState();
                 break;
             }
       }
     }
 }
 
-class _ProductCardWidget extends State<ProductCardWidget> {
+class _ProductCardWidgetState extends State<ProductCardWidget> {
     /*[Attributes]*/
     int _state_id=0;
     late Product widgetDataObject;
@@ -72,7 +71,7 @@ class _ProductCardWidget extends State<ProductCardWidget> {
     bool _isPageLoading = false;
 
 
-    _ProductCardWidget();
+    _ProductCardWidgetState();
 
     /*
     * @Description: Constructor
@@ -81,7 +80,7 @@ class _ProductCardWidget extends State<ProductCardWidget> {
     *
     * @return: void
     */
-    _ProductCardWidget._withData(int state_id, Product productObject)
+    _ProductCardWidgetState._withData(int state_id, Product productObject)
     {
         this._state_id = state_id;
         this.widgetDataObject = productObject;
@@ -102,15 +101,32 @@ class _ProductCardWidget extends State<ProductCardWidget> {
     Widget build(BuildContext context) {
         final double deviceHeight = MediaQuery.of(context).size.height;
         final double deviceWidth = MediaQuery.of(context).size.width;
-        final double cardWidth = (deviceWidth - 40);
-        final double cardHeight = 160;
+        final double cardWidth = (deviceWidth/2) - 20;
+        final double cardHeight = 250;
 
         //Set view
         switch(this._state_id)
         {
             case 0:
             {
-                this._view = Container();
+                this._view = Container(
+                  height: cardHeight,
+                  width: cardWidth,
+                  child: Shimmer.fromColors(
+                    baseColor: HexColor("#d3d3d3").withOpacity(0.5),
+                    highlightColor: Colors.white,
+                    enabled: true,
+                    child: Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Container()
+                    )
+                  )
+                );
                 break;
             }
 
@@ -123,137 +139,100 @@ class _ProductCardWidget extends State<ProductCardWidget> {
             {
                 this._view = Container(
                     height: cardHeight,
+                    width: cardWidth,
                     //padding: EdgeInsets.only(top: 5, bottom: 5, left: 0, right: 0),
-                    width: deviceWidth,
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                       //borderRadius: BorderRadius.all(Radius.circular(50)),
                     ),
                     child: Card(
-                        color: Colors.transparent,
+                        color: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0.0),
+                            borderRadius: BorderRadius.circular(15.0),
                         ),
                         clipBehavior: Clip.antiAlias,
                         child: Container(
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //padding: EdgeInsets.all(5),
+                            child: Column(
                                 children: [
-                                    Container(
-                                        width: cardWidth / 2,
-                                        child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                                Container(
-                                                    padding: EdgeInsets.only(left: 10),
-                                                    child: Text(this.widgetDataObject.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black)),
+                                  Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                              padding: EdgeInsets.only(
+                                                right: 10,
+                                                left: 10,
+                                                top: 5,
+                                                bottom: 5
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: HexColor("#"+this.widgetDataObject.hex).withOpacity(0.1),
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10)
                                                 ),
-                                                SizedBox(
-                                                    height: 20,
-                                                ),
-                                                Row(
-                                                    children: [
-                                                        SizedBox(
-                                                            width: 10,
-                                                        ),
-                                                        Container(
-                                                            child: Row(
-                                                                children: [
-                                                                    Text("\$", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 12.0, color: Colors.black)),
-                                                                    Text(this.widgetDataObject.price.toStringAsFixed(2), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black))
-                                                                ],
-                                                            ),
-                                                        ),
-                                                        SizedBox(
-                                                            width: 30,
-                                                        ),
-                                                        ButtonTheme(
-                                                            minWidth: 30,
-                                                            height: 30,
-                                                            child: RaisedButton(
-                                                                color: this.theme_attribute.primaryColor,
-                                                                padding: EdgeInsets.all(5),
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                child: Icon(
-                                                                    Icons.add
-                                                                ),
-                                                                onPressed: (){
-                                                                    switch (this.widgetDataObject.category_id) {
-                                                                        case 1:
-                                                                             Navigator.push(
-                                                                                context,
-                                                                                MaterialPageRoute<bool>(
-                                                                                    builder: (BuildContext context) => PillPage.withData(this.widgetDataObject.id)
-                                                                                )
-                                                                            );
-                                                                            break;
-
-                                                                        case 2:
-                                                                             Navigator.push(
-                                                                                context,
-                                                                                MaterialPageRoute<bool>(
-                                                                                    builder: (BuildContext context) => FirstAidPage.withData(this.widgetDataObject.id)
-                                                                                )
-                                                                            );
-                                                                            break;
-
-                                                                        case 4:
-                                                                             Navigator.push(
-                                                                                context,
-                                                                                MaterialPageRoute<bool>(
-                                                                                    builder: (BuildContext context) => EmergencyPage.withData(this.widgetDataObject.id)
-                                                                                )
-                                                                            );
-                                                                            break;
-
-                                                                        default:
-                                                                    }
-                                                                },
-                                                            ),
-                                                        )
-                                                    ],
+                                              ),
+                                              child: Text(
+                                                "\$"+this.widgetDataObject.price.toStringAsFixed(0),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20.0,
+                                                  color: HexColor("#"+this.widgetDataObject.hex)
                                                 )
-                                            ],
+                                              ),
+                                          )
+                                        ],
+                                      ),
+                                  ),
+                                  Container(
+                                      child: Center(
+                                        child: CachedNetworkImage(
+                                            imageUrl: this.widgetDataObject.image,
+                                            width: 120,
+                                            height: 120,
+                                            /*errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace){
+                                                return Image.asset(
+                                                    "lib/Projects/My_Pharmacy_App/Assets/Images/noimage.png",
+                                                    width: 120,
+                                                    height: 120
+                                                );
+                                            },*/
                                         ),
+                                      ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      child: Text(this.widgetDataObject.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black))
                                     ),
-                                    Container(
-                                        width: (cardWidth / 2) - 50,
-                                        height: 140,
-                                        decoration: BoxDecoration(
-                                            color: this.theme_attribute.primaryColor,
-                                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                                        ),
-                                        padding: EdgeInsets.all(10),
-                                        child: Stack(
-                                            children: [
-                                                Center(
-                                                    child: Image.network(
-                                                        this.widgetDataObject.image,
-                                                        width: 120,
-                                                        height: 120,
-                                                        /*errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace){
-                                                            return Image.asset(
-                                                                "lib/Projects/My_Pharmacy_App/Assets/Images/noimage.png",
-                                                                width: 120,
-                                                                height: 120
-                                                            );
-                                                        },*/
-                                                    ),
-                                                ),
-                                                Positioned(
-                                                    top: 5,
-                                                    right: 5,
-                                                    child: _likeIcon()
-                                                )
-                                            ],
-                                        )
-                                    )
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      child: Text(this.widgetDataObject.company, style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0, color: Colors.black))
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.only(left: 10, right: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          _likeIcon(),
+                                          Text(this.widgetDataObject.rating.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black))
+                                        ],
+                                      ),
+                                  ),
                                 ],
-                            ),
+                            )
                         )
                     ),
                 );
@@ -284,12 +263,12 @@ class _ProductCardWidget extends State<ProductCardWidget> {
         if(this.widgetDataObject.like){
             return Icon(
                 Icons.favorite,
-                color: Colors.red,
+                color: Colors.black,
             );
         }else{
             return Icon(
                 Icons.favorite_border,
-                color: Colors.white,
+                color: Colors.black,
             );
         }
     }
